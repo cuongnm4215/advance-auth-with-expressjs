@@ -1,0 +1,22 @@
+extends layout
+
+block content
+    .wrapper
+        .login-form
+            include ./partials/messages
+            .header
+                span Sign in
+            .body
+                form(action="/users/login" method="post" id="login")
+                    .form-group
+                        input(type="text" name="username" autocomplete="off" placeholder="Username" class="form-control")
+                    .form-group
+                        input(type="password" name="password" placeholder="Password" class="form-control")
+                    .form-check
+                        input(type="checkbox" class="form-check-input")
+                        label.form-check-label Remember me
+                    button(class="btn btn-login", type="submit") Sign in
+            .footer
+                span.fl-left <a href="/users/forget">Forget password?</a>
+                span.fl-right Don't have an account? <a href="/users/register">Register now</a>
+

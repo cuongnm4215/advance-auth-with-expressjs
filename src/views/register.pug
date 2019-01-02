@@ -1,0 +1,21 @@
+extends layout
+
+block content
+    .wrapper
+        .login-form
+            include ./partials/messages
+            .header
+                span Register
+            .body
+                form(action="/users/register" method="post" id="register")
+                    .form-group
+                        input(type="text" name="username" autocomplete="off" placeholder="Username" class="form-control")
+                    .form-group
+                        input(type="password" id="password" name="password" placeholder="Password" class="form-control")
+                    .form-group
+                        input(type="password" id="confirm" name="confirm" placeholder="Confirm password" class="form-control")
+
+                    button(class="btn btn-login", type="submit") Register
+            .footer
+                span.fl-left Have an account? <a href="/users/login">Login now</a>
+

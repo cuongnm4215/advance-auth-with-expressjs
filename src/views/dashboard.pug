@@ -1,0 +1,14 @@
+extends layout
+
+block content
+    .container
+        .dashboard
+        h4(class="title") Dashboard
+        hr
+        if user
+            p You are loggedin as <b>!{user.username}</b>
+            a(href="/users/logout" class="btn btn-md btn-primary") Logout
+        else
+            p You are'nt login
+            a(href="/users/login" class="btn btn-md btn-primary") Login
+
