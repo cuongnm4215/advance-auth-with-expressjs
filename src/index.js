@@ -10,7 +10,7 @@ const connectMongo = require('connect-mongo');
 const config = require('./config/config');
 const users = require('./routes/users');
 
-mongoose.connect(config.MongoURI, {useNewUrlParser: true, useCreateIndex: true})
+mongoose.connect(config.MongoURI, { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false })
     .then(() => console.log('DB connected...'))
     .catch((err) => console.log(err));
 

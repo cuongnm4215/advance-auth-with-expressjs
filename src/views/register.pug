@@ -9,6 +9,8 @@ block content
             .body
                 form(action="/users/register" method="post" id="register")
                     .form-group
+                        input(type="email" name="email" autocomplete="off" placeholder="Email" class="form-control")
+                    .form-group
                         input(type="text" name="username" autocomplete="off" placeholder="Username" class="form-control")
                     .form-group
                         input(type="password" id="password" name="password" placeholder="Password" class="form-control")

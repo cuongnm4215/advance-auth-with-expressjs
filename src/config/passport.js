@@ -22,6 +22,12 @@ module.exports = function(passport) {
                 if (!user.isValidPassword(password)) {
                     return done(null, false, { message: 'Incorrect password' });
                 }
+                if (!user.confirmed) {
+                    return done(null, false, { message: 'Please check email to active your account' });
+                }
+                if (user.del_flag) {
+                    return done(null, false, { message: 'Your account has been blocked' });
+                }
                 return done(null, user);
             });
         }

@@ -1,5 +1,6 @@
 $('#register').validate({
     rules: {
+        email: 'required',
         username: 'required',
         password: 'required',
         confirm: {
@@ -8,6 +9,7 @@ $('#register').validate({
         }
     },
     messages: {
+        email: 'Field is required',
         username: 'Field is required',
         password: 'Field is required',
         confirm: {

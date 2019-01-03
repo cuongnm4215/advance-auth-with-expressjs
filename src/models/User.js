@@ -1,6 +1,13 @@
 const mongoose = require('mongoose');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const uniqueValidator = require('mongoose-unique-validator');
+const fs = require('fs');
+const path = require('path');
+
+const config = require('./../config/config');
+
+const cert = fs.readFileSync(path.join(__dirname, '../../keys/jwtRS256.key'));
 
 const UserSchema = mongoose.Schema({
     username: { type: String, required: true, unique: true, lowercase: true, trim: true },
@@ -24,6 +31,22 @@ UserSchema.methods.setPassword = function setPassword(password) {
 UserSchema.methods.isValidPassword = function isValidPassword(password) {
     return bcryptjs.compareSync(password, this.password);
 }
+
+UserSchema.methods.generateActiveToken = function generateActiveToken() {
+    return jwt.sign({
+        email: this.email
+    }, cert, {algorithm: 'RS256', expiresIn: '1h'});
+}
+
+UserSchema.methods.setActiveToken = function setActiveToken() {
+    this.confirm_token = this.generateActiveToken();
+}
+
+UserSchema.methods.generateActiveURL = function generateActiveURL() {
+    return `${config.HOST}/users/confirm?token=${this.confirm_token}`;
+}
+
+UserSchema.plugin(uniqueValidator, { message: 'This {PATH} is already taken' });
 
 const User = mongoose.model('User', UserSchema);
 

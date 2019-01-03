@@ -1,7 +1,11 @@
 const express = require('express');
 const router =  express.Router();
 const passport =  require('passport');
+const _ = require('lodash');
+
 const User = require('./../models/User');
+const sendConfirmEmail = require('./../ultis/mailer').sendConfirmEmail;
+const common = require('../ultis/common');
 
 require('./../config/passport')(passport);
 
@@ -26,9 +30,9 @@ router.get('/register', (req, res) => {
 
 router.post('/register', function (req, res) {
     const credentials = req.body;
-    const { username, password, confirm } = credentials;
+    const { username, email, password, confirm } = credentials;
 
-    if (!username || !password || !confirm) {
+    if (!username || !email || !password || !confirm) {
         req.flash('error', 'Please fill in all fields');
         return res.redirect('/users/register');
     }
@@ -38,17 +42,42 @@ router.post('/register', function (req, res) {
         return res.redirect('/users/register');
     }
 
-    const user = new User({ username });
+    const user = new User({ username, email });
     user.setPassword(password);
+    user.setActiveToken();
     user.save()
-        .then(() => {
-            req.flash('success', 'Register successfully');
+        .then((user) => {
+            sendConfirmEmail(user);
+            req.flash('success', 'Register successfully. Please check email to active your account');
             return res.redirect('/users/login');
         })
-        .catch(() => {
-            req.flash('error', 'Already username');
+        .catch((err) => {
+            const error = common.parseErrors(err.errors);
+            _.forEach(error, function(val) {
+                req.flash('error', val);
+            });
             return res.redirect('/users/register');
         });
+});
+
+router.get('/confirm', function (req, res) {
+    const token = req.query.token;
+    if (!!token) {
+        User.findOneAndUpdate({ confirm_token: token }, { confirmed: true, confirm_token: '' })
+            .then((user) => {
+                if (!!user) {
+                    req.flash('success', 'Active account successfully');
+                    return res.redirect('/users/login');
+                }
+                req.flash('error', 'Invalid token');
+                return res.redirect('/users/login');
+
+            })
+            .catch(() => {
+                req.flash('error', 'An error occurred. Please try again');
+                return res.redirect('/users/login');
+            })
+    }
 });
 
 module.exports = router;

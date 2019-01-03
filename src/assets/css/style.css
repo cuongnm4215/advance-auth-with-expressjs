@@ -109,3 +109,7 @@ label.is-invalid {
     font-size: 80%;
     color: #dc3545;
 }
+
+.custom-alert {
+    font-size: 12px !important;
+}
