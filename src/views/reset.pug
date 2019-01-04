@@ -9,8 +9,12 @@ block content
             .body
                 form(action="/users/reset" method="post" id="reset")
                     .form-group
+                        input(type="email" id="email" autocomplete="off" disabled name="email" placeholder="Email" value=email class="form-control")
+                    .form-group
                         input(type="password" id="password" name="password" placeholder="New password" class="form-control")
                     .form-group
                         input(type="password" id="confirm" name="confirm" placeholder="Confirm new password" class="form-control")
+                    .form-group
+                        input(type="hidden" id="token" name="token" value=token class="form-control")
 
                     button(class="btn btn-login", type="submit" id="reset_password") Submit

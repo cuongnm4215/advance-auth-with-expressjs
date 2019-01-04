@@ -66,18 +66,28 @@ function forgotValidate() {
 function resetValidate() {
     $('#reset').validate({
         rules: {
+            email: {
+                required: true,
+                email: true
+            },
             password: 'required',
             confirm: {
                 required: true,
                 equalTo: '#password'
-            }
+            },
+            token: 'required'
         },
         messages: {
+            email: {
+                required: 'Field is required',
+                email: 'Invalid email address'
+            },
             password: 'Field is required',
             confirm: {
                 required: 'Field is required',
                 equalTo: 'Password do not match'
-            }
+            },
+            token: 'Token is required'
         },
         errorClass: 'is-invalid',
         validClass: 'is-valid',
@@ -95,25 +105,9 @@ function parseQueryString() {
     return query;
 }
 
-function prepareResetPassword() {
-    $('#reset_password').click(function(e) {
-        e.preventDefault();
-        const query = parseQueryString();
-        const { token } = query;
-        if (!!token) {
-            const input = $("<input>")
-                .attr("type", "hidden")
-                .attr("name", "token").val(token);
-            $('#reset').append(input);
-            $('#reset').submit();
-        }
-    });
-}
-
 $(document).ready(function() {
     loginValidate();
     registerValidate();
     forgotValidate();
     resetValidate();
-    prepareResetPassword();
 });

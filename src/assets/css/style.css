@@ -113,3 +113,8 @@ label.is-invalid {
 .custom-alert {
     font-size: 12px !important;
 }
+
+.close {
+    outline: none !important;
+    padding: 0.65rem 1.25rem !important;
+}

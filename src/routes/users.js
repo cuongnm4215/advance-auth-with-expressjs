@@ -87,7 +87,7 @@ router.get('/confirm', function (req, res) {
 });
 
 router.get('/forget', function(req, res) {
-    res.render('forget');
+    res.render('forget', { title: 'Forget Password' });
 });
 
 router.post('/forget', function(req, res) {
@@ -111,14 +111,23 @@ router.post('/forget', function(req, res) {
 });
 
 router.get('/reset', function(req, res) {
-    res.render('reset');
+    const token = req.query.token;
+    if (!!token) {
+        const decoded = jwt.decode(token);
+        if (!!decoded.email) {
+            return res.render('reset', { token, email: decoded.email, title: 'Reset Password' });
+        } else {
+            req.flash('error', 'Invalid token');
+            return res.redirect('/users/forget');
+        }
+    }
+    req.flash('error', 'No token provided');
+    return res.redirect('/users/forget');
 });
 
 router.post('/reset', function(req, res) {
-    // console.log(req.body);
-    // return res.redirect('back');
-    // const token = req.query;
     const { token, password, confirm } = req.body;
+    console.log(token);
 
     if (!password || !confirm) {
         req.flash('error', 'Please fill in all fields');
