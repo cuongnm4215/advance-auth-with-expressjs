@@ -2,21 +2,22 @@ const express = require('express');
 const router =  express.Router();
 const passport =  require('passport');
 const jwt = require('jsonwebtoken');
-const url = require('url');
-const querystring = require('querystring');
 const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
 
 const User = require('./../models/User');
-const mailer = require('./../ultis/mailer');
-const common = require('../ultis/common');
+const mailer = require('./../utils/mailer');
+const common = require('../utils/common');
 const pubkey = fs.readFileSync(path.join(__dirname, './../../keys/jwtRS256.key.pub'));
 
 require('./../config/passport')(passport);
 
 router.get('/login', (req, res) => {
-    res.render('login', { title: 'Login' });
+    if (req.isAuthenticated()) {
+        return res.redirect('/');
+    }
+    return res.render('login', { title: 'Login' });
 });
 
 router.post('/login', passport.authenticate('local', {
