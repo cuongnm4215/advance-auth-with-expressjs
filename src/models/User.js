@@ -38,12 +38,22 @@ UserSchema.methods.generateActiveToken = function generateActiveToken() {
     }, cert, {algorithm: 'RS256', expiresIn: '1h'});
 }
 
+UserSchema.methods.generateResetPasswordToken = function generateResetPasswordToken() {
+    return jwt.sign({
+        email: this.email
+    }, cert, { algorithm: 'RS256', expiresIn: '1h' });
+}
+
 UserSchema.methods.setActiveToken = function setActiveToken() {
     this.confirm_token = this.generateActiveToken();
 }
 
 UserSchema.methods.generateActiveURL = function generateActiveURL() {
     return `${config.HOST}/users/confirm?token=${this.confirm_token}`;
+}
+
+UserSchema.methods.generateResetPasswordURL = function generateResetPasswordURL() {
+    return `${config.HOST}/users/reset?token=${this.generateResetPasswordToken()}`;
 }
 
 UserSchema.plugin(uniqueValidator, { message: 'This {PATH} is already taken' });

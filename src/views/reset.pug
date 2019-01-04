@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    .wrapper
+        .login-form
+            include ./partials/messages
+            .header
+                span Reset Password
+            .body
+                form(action="/users/reset" method="post" id="reset")
+                    .form-group
+                        input(type="password" id="password" name="password" placeholder="New password" class="form-control")
+                    .form-group
+                        input(type="password" id="confirm" name="confirm" placeholder="Confirm new password" class="form-control")
+
+                    button(class="btn btn-login", type="submit" id="reset_password") Submit

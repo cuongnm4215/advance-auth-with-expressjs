@@ -1,11 +1,17 @@
 const express = require('express');
 const router =  express.Router();
 const passport =  require('passport');
+const jwt = require('jsonwebtoken');
+const url = require('url');
+const querystring = require('querystring');
+const fs = require('fs');
+const path = require('path');
 const _ = require('lodash');
 
 const User = require('./../models/User');
-const sendConfirmEmail = require('./../ultis/mailer').sendConfirmEmail;
+const mailer = require('./../ultis/mailer');
 const common = require('../ultis/common');
+const pubkey = fs.readFileSync(path.join(__dirname, './../../keys/jwtRS256.key.pub'));
 
 require('./../config/passport')(passport);
 
@@ -47,7 +53,7 @@ router.post('/register', function (req, res) {
     user.setActiveToken();
     user.save()
         .then((user) => {
-            sendConfirmEmail(user);
+            mailer.sendConfirmEmail(user);
             req.flash('success', 'Register successfully. Please check email to active your account');
             return res.redirect('/users/login');
         })
@@ -77,6 +83,77 @@ router.get('/confirm', function (req, res) {
                 req.flash('error', 'An error occurred. Please try again');
                 return res.redirect('/users/login');
             })
+    }
+});
+
+router.get('/forget', function(req, res) {
+    res.render('forget');
+});
+
+router.post('/forget', function(req, res) {
+    const email = req.body.email;
+
+    if (!!email) {
+        User.findOne({ email: email }).then((user) => {
+            if (!!user) {
+                mailer.sendResetPasswordEmail(user);
+                req.flash('success', 'Please check your email to reset password');
+                return res.redirect('/users/login');
+            } else {
+                req.flash('error', 'Invalid email address');
+                return res.redirect('/users/forget');
+            }
+        })
+    } else {
+        req.flash('error', 'Invalid email address');
+        return res.redirect('/users/forget');
+    }
+});
+
+router.get('/reset', function(req, res) {
+    res.render('reset');
+});
+
+router.post('/reset', function(req, res) {
+    // console.log(req.body);
+    // return res.redirect('back');
+    // const token = req.query;
+    const { token, password, confirm } = req.body;
+
+    if (!password || !confirm) {
+        req.flash('error', 'Please fill in all fields');
+        return res.redirect(`/users/reset?token=${token}`);
+    }
+
+    if (password !== confirm) {
+        req.flash('error', 'Password do not match');
+        return res.redirect(`/users/reset?token=${token}`);
+    }
+    if (!!token) {
+        jwt.verify(token, pubkey, function (err, decoded) {
+            if (err) {
+                req.flash('error', 'Invalid token');
+                return res.redirect('/users/login');
+            }
+            if (!!decoded.email) {
+                User.findOne({ email: decoded.email })
+                    .then((user) => {
+                        user.setPassword(password);
+                        user.save()
+                            .then(() => {
+                                req.flash('success', 'Reset password successfully');
+                                return res.redirect('/users/login');
+                            })
+                            .catch(() => {
+                                req.flash('error', 'An error occurred. Please try again');
+                                return res.redirect(`/users/reset?token=${token}`);
+                            })
+                    })
+            }
+        })
+    } else {
+        req.flash('error', 'No token provided');
+        return res.redirect('/users/login');
     }
 });
 

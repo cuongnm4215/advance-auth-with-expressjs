@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    .wrapper
+        .login-form
+            include ./partials/messages
+            .header
+                span Reset password
+            .body
+                form(action="/users/forget" method="post" id="forget")
+                    .form-group
+                        input(type="email" name="email" autocomplete="off" placeholder="Email" class="form-control")
+                    button(class="btn btn-login", type="submit") Reset Password
