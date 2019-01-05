@@ -128,7 +128,6 @@ router.get('/reset', function(req, res) {
 
 router.post('/reset', function(req, res) {
     const { token, password, confirm } = req.body;
-    console.log(token);
 
     if (!password || !confirm) {
         req.flash('error', 'Please fill in all fields');

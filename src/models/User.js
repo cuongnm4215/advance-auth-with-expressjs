@@ -48,6 +48,10 @@ UserSchema.methods.setActiveToken = function setActiveToken() {
     this.confirm_token = this.generateActiveToken();
 }
 
+UserSchema.methods.setRememberToken = function setRememberToken(token) {
+    this.remember_token = token;
+}
+
 UserSchema.methods.generateActiveURL = function generateActiveURL() {
     return `${config.HOST}/users/confirm?token=${this.confirm_token}`;
 }
