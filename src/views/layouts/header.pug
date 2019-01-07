@@ -1,0 +1,15 @@
+nav
+    .menu-left
+        .logo
+            span Advance Auth System
+        ul.menu-items
+            li.menu-item <a class="menu-link" href="#">Home</a>
+            li.menu-item <a class="menu-link" href="#">Contact</a>
+            li.menu-item <a class="menu-link" href="#">About us</a>
+            li.menu-item <a class="menu-link" href="#">FAQs</a>
+    .menu-right
+        if user
+            span= user.email
+            a(class="btn btn-custom login-link" href="/users/logout") Log out
+        else
+            a(class="btn btn-custom login-link" href="/users/login") Log in

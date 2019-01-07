@@ -156,3 +156,110 @@ label.is-invalid {
 .btn-error-page {
     padding: .85rem .75rem !important;
 }
+
+nav {
+    width: 100%;
+    height: 60px;
+    background: #d43f8d;
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 0 100px;
+}
+
+nav .menu-left {
+    height: 100%;
+    float: left;
+    display: flex;
+}
+
+.menu-left .logo {
+    align-content: center;
+    align-self: center;
+    font-size: 24px;
+    font-weight: 800;
+    text-transform: uppercase;
+    word-spacing: 1px;
+}
+.menu-items {
+    padding: 0;
+    margin: 0;
+    align-self: center;
+    justify-content: center;
+}
+
+.menu-items li:not(:first-child) {
+    text-transform: uppercase;
+    display: inline-block;
+    padding: 0 20px;
+}
+
+.menu-items li:first-child {
+    text-transform: uppercase;
+    display: inline-block;
+    padding-left: 50px;
+    padding-right: 20px;
+}
+
+nav .menu-right {
+    height: 100%;
+    float: right;
+    display: flex;
+}
+
+.menu-right * {
+    align-self: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.menu-right span {
+    cursor: pointer;
+    padding-right: 20px;
+}
+
+.btn-custom {
+    color: #fff;
+    text-transform: uppercase;
+    transition: all 0.2s ease-in-out;
+}
+
+.login-link {
+    border: solid 1px #fff;
+}
+
+.login-link:hover {
+    border: solid 1px #333333;
+}
+
+.login-link:focus {
+    outline: none;
+}
+
+.btn-custom:hover {
+    color: #333333;
+}
+
+.menu-link {
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.menu-link:hover {
+    color: #333333;
+    text-decoration: none;
+}
+
+@media screen and (min-width: 1400px) {
+    .content {
+        margin-top: 80px;
+        padding: 0 200px;
+    }
+}
+
+.landing-text {
+    text-align: justify;
+}
+

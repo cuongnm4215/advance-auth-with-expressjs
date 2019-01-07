@@ -60,10 +60,10 @@ app.use(function(req, res) {
     return res.render('404', { title: 'Page Not Found' });
 });
 
-app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    return res.render('500', { title: 'Internal Server Error' });
-});
+// app.use(function (err, req, res, next) {
+//     res.status(err.status || 500);
+//     return res.render('500', { title: 'Internal Server Error' });
+// });
 
 app.listen(PORT, function() {
     console.log(`Server started on http://localhost:${PORT}`);
